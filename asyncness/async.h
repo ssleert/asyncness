@@ -17,6 +17,13 @@ typedef struct {
 	async_struct;
 } async_state_t;
 
+async_state_t *async_new(void) {
+	async_state_t state = {
+		._async_state = COROUTINE_CONTINUE
+	}
+	return &state
+}
+
 #define async_init(state) do {                           \
 	(state)->_async_state = COROUTINE_CONTINUE;      \
 } while (0)

@@ -1,5 +1,6 @@
-#ifndef SEMAPHORE_H
-#define SEMAPHORE_H
+#pragma once
+#ifndef _SEMAPHORE_H_
+#define _SEMAPHORE_H_
 
 #include <stdint.h>
 #include "async.h"
@@ -12,16 +13,16 @@ semaphore_t *semaphore_new(uint_fast32_t c) {
 	semaphore_t sem = {
 		._count = c,
 	};
-	return &sem
+	return &sem;
 }
 
-void semaphore_signal(semaphore_t *sem) {
-	++(sem)->count
+inline void semaphore_signal(semaphore_t *sem) {
+	++(sem)->count;
 }
 
-#define await_sem(s) do {      \
-	await((s)->count > 0); \
-	--(s)->count;          \
+#define semaphore_wait(sem) do { \
+	await((sem)->count > 0); \
+	--(sem)->count;          \
 } while (0)
 
 #endif
