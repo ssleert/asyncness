@@ -8,25 +8,23 @@
 typedef enum COROUTINE_STATES {
 	COROUTINE_CONTINUE = false,
 	COROUTINE_DONE     = true,
-} async_t;
+} async;
 
 #define async_struct \
      uint_fast32_t _async_state
 
 typedef struct {
 	async_struct;
-} async_state_t;
-
-async_state_t *async_new(void) {
-	async_state_t state = {
-		._async_state = COROUTINE_CONTINUE
-	}
-	return &state
-}
+} async_t;
 
 #define async_init(state) do {                           \
 	(state)->_async_state = COROUTINE_CONTINUE;      \
 } while (0)
+
+#define async_var(var)                                   \
+	var = {                                          \
+		._async_state = COROUTINE_CONTINUE,      \
+	}
 
 #define async_begin(state)                               \
 	unsigned *_async_state = &(state)->_async_state; \
@@ -39,7 +37,7 @@ async_state_t *async_new(void) {
 		return COROUTINE_DONE;                   \
 	}
 
-#define async_yield                                      \
+#define async_sched                                      \
 	*_async_state = __LINE__;                        \
 	return COROUTINE_CONTINUE;                       \
 	case __LINE__:
