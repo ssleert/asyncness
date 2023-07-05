@@ -25,7 +25,7 @@ async coroutine1(async_t *pt) {
 		async_sched;
 		puts("from 1 protothread after context change");
 	}
-	
+
 	puts("coroutine 1 stoped");
 
 	// stop async on coroutine end

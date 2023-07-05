@@ -10,32 +10,39 @@
 #endif
 
 #include <stdbool.h>
-
 #include "async.h"
 
-static int get_time(void)
+// Get current time in seconds.
+static int _get_time(void)
 
+// Timer type.
 typedef struct {
 	int start;
 	int interval;
 } timer_t;
 
+// Check if time expired.
+//
+// @param t Ptr to timer_t.
 inline bool timer_expired(timer_t *t) {
-	return get_time() - t->start >= t->interval;
+	return _get_time() - t->start >= t->interval;
 }
 
+// Set timer to interval in miliseconds
+//
+// @param t Ptr to timer_t.
+// @param interval Interval in miliseconds.
 inline void timer_set(timer_t *t, int interval) {
 	t->interval = interval;
-	t->start = get_time();
+	t->start = _get_time();
 }
 
-static int get_time(void) {
+static inline int _get_time(void) {
 #ifdef _WIN32
 	return (int)GetTickCount();
 #else
 	struct timeval tv;
-	struct timezone tz;   
-	gettimeofday(&tv, &tz); 
+	gettimeofday(&tv, NULL); 
 	return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 #endif
 }
