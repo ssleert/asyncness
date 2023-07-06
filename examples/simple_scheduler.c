@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "../asyncness/async.h"
+#include "../asyncness/semaphore.h"
+#include "../asyncness/timer.h"
 
 async coroutine1(async_t *pt) {
 	// coz coroutines is stackless
@@ -51,19 +53,20 @@ int main(void) {
 	// declare states for coroutines
 	// async_var() macros automatically
 	// sets zero async state to var
-	async_t async_var(pt1), async_var(pt2);
+	async_t *pt1 = async_new();
+	async_t *pt2 = async_new();
 
 	// also u can use async_init(state)
 	// it also useful for own async structs
-	async_init(&pt1);
-	async_init(&pt2);
+	async_init(pt1);
+	async_init(pt2);
 
 	// start loop with concurrent coroutines
 	// that sched each other
 	while (!(
 		// the loop will run until 
 		// both coroutines are complete
-		coroutine1(&pt1) & coroutine2(&pt2)
+		coroutine1(pt1) & coroutine2(pt2)
 		// why do we use a binary operator? 
 		// the compiler optimizes boolean operators (||, &&) 
 		// and the second coroutine simply will not run 

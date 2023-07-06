@@ -15,26 +15,24 @@ typedef struct {
 //    semaphore_t *sem = semaphore_new(7);
 //
 // @param c Count for semaphore.
-semaphore_t *semaphore_new(uint_fast32_t c) {
-	semaphore_t sem = {
-		._count = c,
-	};
-	return &sem;
-}
+#define semaphore_new(c)           \
+	&(semaphore_t){            \
+		._count = c,       \
+	}
 
 // Signal to semaphore.
 //
 // @param sem Ptr to semaphore_t.
-inline void semaphore_signal(semaphore_t *sem) {
-	++(sem)->_count;
-}
+#define semaphore_signal(sem) do { \
+	++(sem)->_count;           \
+} while (0)
 
 // Wait until semaphore is free.
 //
 // @param sem Ptr to semaphore_t
-#define semaphore_wait(sem) do {  \
-	await((sem)->_count > 0); \
-	--(sem)->_count;          \
+#define semaphore_wait(sem) do {   \
+	await((sem)->_count > 0);  \
+	--(sem)->_count;           \
 } while (0)
 
-#endif
+#endif /* _SEMAPHORE_H_ */

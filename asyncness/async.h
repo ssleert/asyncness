@@ -31,12 +31,11 @@ typedef struct {
 //    async_t async_var(state);
 //
 // @param var Any struct with _async_state field.
-#define async_var(var)                                   \
-	var = {                                          \
+#define async_new()                                      \
+	&(async_t){                                      \
 		._async_state = COROUTINE_CONTINUE,      \
 	}
-
-// Init _async_state field in any struct.
+   
 // Example:
 //    async_t async_state;
 //    async_init(async_state)
@@ -117,4 +116,4 @@ typedef struct {
 	async_done(state) || (f)(state, __VA_ARGS__)     \
 )
 
-#endif
+#endif /* _ASYNC_H_ */
